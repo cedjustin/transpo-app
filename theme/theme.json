@@ -1,0 +1,20 @@
+{
+  "background": "#2E343B",
+  "primary": "#FFBF00",
+  "success": "#99E047",
+  "info": "#42BCFF",
+  "warning": "#FFE330",
+  "danger": "#FF514F",
+  "muted-white": "#7B8499",
+  "color-basic-100": "#EAF1F5",
+  "color-basic-200": "#D6E3EB",
+  "color-basic-300": "#AAB8C4",
+  "color-basic-400": "#727E89",
+  "color-basic-500": "#2E343B",
+  "color-basic-600": "#212832",
+  "color-basic-700": "#171E2A",
+  "color-basic-800": "#0E1422",
+  "color-basic-900": "#080E1C",
+  "color-basic-1000": "#1F1F1F",
+  "color-basic-1100": "#141414"
+}
