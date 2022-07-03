@@ -2,17 +2,26 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './Views/Login';
+import Signup from './Views/Signup';
+import { default as theme } from './theme/theme.json';
 
 const Navigation = () => {
 
     const Stack = createNativeStackNavigator()
 
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={{colors:{background: theme['background']}}}>
             <Stack.Navigator>
-                <Stack.Screen 
+                <Stack.Screen
                     name='login'
-                    component={Login} 
+                    component={Login}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Stack.Screen
+                    name='signup'
+                    component={Signup}
                     options={{
                         headerShown: false
                     }}

@@ -1,7 +1,7 @@
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { default as theme } from './theme/theme.json';
-import { StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import Navigation from './Navigation';
 
 export default function App() {
@@ -12,7 +12,7 @@ export default function App() {
         backgroundColor={theme['background']}
         barStyle='light'
       />
-      <Navigation />
+        <Navigation />
     </ApplicationProvider>
   );
 }

@@ -1,20 +1,25 @@
 import { Layout, Text, Input, Button } from '@ui-kitten/components'
 import React, { useState } from 'react'
-import { Dimensions, ScrollView, StyleSheet, View, Image } from 'react-native'
+import { Dimensions, StyleSheet, View, Image } from 'react-native'
 import { default as theme } from '../theme/theme.json';
 
 // images
 import LoginBike from '../assets/login-bike.png'
 import Brand from '../assets/brand.png'
+import ScreenWrapper from '../components/ScreenWrapper';
 
-const Login = () => {
+const Login = ({ navigation }) => {
 
     const [phoneNumber, setPhoneNumber] = useState('+250');
     const [pinNumber, setPinNumber] = useState('');
 
+    const goToSignup = () => {
+        navigation.navigate('signup')
+    }
+
     return (
-        <Layout style={{ backgroundColor: theme['background'] }}>
-            <View style={styles.container}>
+        <ScreenWrapper>
+            <View style={{ marginVertical: 100 }}>
                 <View style={styles.centeredRow}>
                     <Image source={LoginBike} style={styles.topImage} />
                 </View>
@@ -46,17 +51,19 @@ const Login = () => {
                     </View>
                     <View style={{ marginVertical: 20 }}>
                         <Button style={{ backgroundColor: theme.primary, borderColor: theme.primary }}>
-                            LOGIN
+                            {() => <Text style={{ color: '#000' }}>
+                                LOGIN
+                            </Text>}
                         </Button>
                     </View>
-                    <View>
-                        <Text style={{ color: theme['muted-white'] }}>
+                    <Button appearance='ghost' onPress={() => goToSignup()}>
+                        {() => <Text style={{ color: theme['muted-white'] }}>
                             Or SIGNUP
-                        </Text>
-                    </View>
+                        </Text>}
+                    </Button>
                 </View>
             </View>
-        </Layout>
+        </ScreenWrapper>
     )
 }
 
