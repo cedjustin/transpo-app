@@ -12,7 +12,7 @@ export default function App() {
         backgroundColor={theme['background']}
         barStyle='light'
       />
-        <Navigation />
+      <Navigation />
     </ApplicationProvider>
   );
 }
