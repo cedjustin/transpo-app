@@ -1,17 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { default as theme } from './theme/theme.json';
+
+// pages
 import Login from './Views/Login';
 import Signup from './Views/Signup';
-import { default as theme } from './theme/theme.json';
-import { StatusBar, View } from 'react-native';
+import Index from './Views/Index'
 
 const Navigation = () => {
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
     const Stack = createNativeStackNavigator()
+    const Drawer = createDrawerNavigator()
+
+    const customTheme = {
+        dark: true,
+        colors:{
+            ...theme
+        }
+    }
 
     return (
-            <NavigationContainer>
+        <NavigationContainer theme={customTheme}>
+            {isLoggedIn ?
                 <Stack.Navigator>
                     <Stack.Screen
                         name='login'
@@ -27,8 +41,12 @@ const Navigation = () => {
                             headerShown: false
                         }}
                     />
-                </Stack.Navigator>
-            </NavigationContainer>
+                </Stack.Navigator> :
+                <Drawer.Navigator>
+                    <Drawer.Screen name='index' component={Index} options={{ headerShown: false }} />
+                </Drawer.Navigator>
+            }
+        </NavigationContainer>
     )
 }
 
