@@ -39,7 +39,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     marginHorizontal: 10,
-    height: (Dimensions.get('window').height * 20) / 100
+    height: (Dimensions.get('window').height * 20) / 100,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   row: {
     flexDirection: 'row',
@@ -56,7 +58,6 @@ const styles = StyleSheet.create({
   input: {
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: theme['muted-white'],
     backgroundColor: theme['background']
 }
 })
