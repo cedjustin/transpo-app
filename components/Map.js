@@ -74,11 +74,14 @@ const Map = () => {
             style={styles.map}
             initialRegion={region}
             customMapStyle={mapTheme}
+            showsBuildings={true}
+            showsIndoors={true}
+            scrollEnabled={false}
+            zoomEnabled={false}
         >
             {region ? <Marker
                 key="location"
                 coordinate={{ latitude: region.latitude, longitude: region.longitude }}
-                style={styles.mapPin}
                 tappable={false}
             >
                 <Image source={myLocationPin} style={styles.mapPin} />
@@ -103,7 +106,9 @@ const Map = () => {
 const styles = StyleSheet.create({
     map: {
         width: Dimensions.get('window').width,
-        height: (Dimensions.get('window').height*70)/100
+        height: ((Dimensions.get('window').height*70)/100)+20,
+        zIndex: -1,
+        top: -20
     },
     mapPin: {
         width: 30,
