@@ -8,14 +8,15 @@ import mapTheme from '../theme/map.json'
 
 //images
 import myLocationPin from '../assets/my-location-pin.png'
+import axios from 'axios';
 
-const Map = () => {
+const Map = (props) => {
 
     const [region, setRegion] = useState(null)
     const [destination, setDestination] = useState(null)
     const [errorMsg, setErrorMsg] = useState(null);
 
-    const getRegion = (location) => {
+    const getRegion = async (location) => {
 
         const centroid = {
             latitude: location.coords.latitude,
@@ -43,11 +44,18 @@ const Map = () => {
         const latDelta = northeastLat - southwestLat;
         const lngDelta = latDelta * ASPECT_RATIO;
 
+        try {
+            const res = await axios('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + location.coords.latitude + ',' + location.coords.longitude + '&key=' + mapKey['map-key'])
+            props.setNameOfUserLocation(res.data.results[3].formatted_address)
+        } catch (e) {
+            console.log(e)
+        }
+
         setRegion({
             latitude: lat,
             longitude: lng,
             latitudeDelta: latDelta,
-            longitudeDelta: lngDelta
+            longitudeDelta: lngDelta,
         })
 
     }
@@ -77,7 +85,6 @@ const Map = () => {
             showsBuildings={true}
             showsIndoors={true}
             scrollEnabled={false}
-            zoomEnabled={false}
         >
             {region ? <Marker
                 key="location"
@@ -106,7 +113,7 @@ const Map = () => {
 const styles = StyleSheet.create({
     map: {
         width: Dimensions.get('window').width,
-        height: ((Dimensions.get('window').height*70)/100)+20,
+        height: ((Dimensions.get('window').height * 70) / 100) + 20,
         zIndex: -1,
         top: -20
     },
