@@ -84,7 +84,6 @@ const Map = (props) => {
             customMapStyle={mapTheme}
             showsBuildings={true}
             showsIndoors={true}
-            scrollEnabled={false}
         >
             {region ? <Marker
                 key="location"
