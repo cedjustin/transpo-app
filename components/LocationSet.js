@@ -1,4 +1,3 @@
-import { Text } from '@ui-kitten/components'
 import React from 'react'
 import { Dimensions, StyleSheet, View, Image, KeyboardAvoidingView } from 'react-native'
 import mapKey from '../keys/map-key.json'
@@ -17,7 +16,18 @@ const LocationSet = (props) => {
           <Image source={startingPointPin} style={styles.icon} />
           <PlacesInput
             googleApiKey={mapKey['map-key']}
-            onSelect={place => console.log(place)}
+            onSelect={place => {
+              props.getRegion({
+                location: {
+                  coords: {
+                    latitude: place.result.geometry.location.lat,
+                    longitude: place.result.geometry.location.lng
+                  }
+                },
+                position: 'starting-point',
+                getLocationName: false
+              })
+            }}
             stylesContainer={{ ...styles.placesSearchContainer, zIndex: 1 }}
             stylesInput={styles.placesSearchInput}
             placeHolder={props.nameOfUserLocation ? props.nameOfUserLocation : 'Search for starting point'}
@@ -31,7 +41,18 @@ const LocationSet = (props) => {
           <Image source={destinationPin} style={styles.icon} />
           <PlacesInput
             googleApiKey={mapKey['map-key']}
-            onSelect={place => console.log(place)}
+            onSelect={place => {
+              props.getRegion({
+                location: {
+                  coords: {
+                    latitude: place.result.geometry.location.lat,
+                    longitude: place.result.geometry.location.lng
+                  }
+                },
+                position: 'destination',
+                getLocationName: false
+              })
+            }}
             stylesContainer={{ ...styles.placesSearchContainer, zIndex: 0 }}
             stylesInput={styles.placesSearchInput}
             placeHolder='Search destination'

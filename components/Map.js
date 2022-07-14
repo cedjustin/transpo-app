@@ -5,61 +5,16 @@ import mapKey from '../keys/map-key.json'
 import MapViewDirections from 'react-native-maps-directions';
 import { StyleSheet, Dimensions, Image } from 'react-native';
 import mapTheme from '../theme/map.json'
+import theme from '../theme/theme.json'
 
 //images
 import myLocationPin from '../assets/my-location-pin.png'
-import axios from 'axios';
+import directionsMarker1 from '../assets/directions-marker-1.png'
+import directionsMarker2 from '../assets/directions-marker-2.png'
 
 const Map = (props) => {
 
-    const [region, setRegion] = useState(null)
-    const [destination, setDestination] = useState(null)
     const [errorMsg, setErrorMsg] = useState(null);
-
-    const getRegion = async (location) => {
-
-        const centroid = {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude
-        }
-
-        const boundingBox = {
-            southWest: {
-                latitude: centroid.latitude - 0.002569,
-                longitude: centroid.longitude + 0.003787
-            },
-            northEast: {
-                latitude: centroid.latitude + 0.002569,
-                longitude: centroid.longitude + 0.003778
-            }
-        }
-
-        const { width, height } = Dimensions.get('window');
-        const ASPECT_RATIO = width / height;
-
-        const lat = parseFloat(centroid.latitude);
-        const lng = parseFloat(centroid.longitude);
-        const northeastLat = parseFloat(boundingBox.northEast.latitude);
-        const southwestLat = parseFloat(boundingBox.southWest.latitude);
-        const latDelta = northeastLat - southwestLat;
-        const lngDelta = latDelta * ASPECT_RATIO;
-
-        try {
-            const res = await axios('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + location.coords.latitude + ',' + location.coords.longitude + '&key=' + mapKey['map-key'])
-            props.setNameOfUserLocation(res.data.results[3].formatted_address)
-        } catch (e) {
-            console.log(e)
-        }
-
-        setRegion({
-            latitude: lat,
-            longitude: lng,
-            latitudeDelta: latDelta,
-            longitudeDelta: lngDelta,
-        })
-
-    }
-
 
     useEffect(() => {
         (async () => {
@@ -70,7 +25,7 @@ const Map = (props) => {
                     return;
                 }
                 let location = await Location.getCurrentPositionAsync({});
-                getRegion(location);
+                props.getRegion({ location, position: "starting-point", getLocationName: true });
             } catch (e) {
                 console.log(e)
             }
@@ -80,29 +35,31 @@ const Map = (props) => {
     return (
         <MapView
             style={styles.map}
-            initialRegion={region}
+            initialRegion={{ ...props.startingPoint, ...props.deltaValues }}
             customMapStyle={mapTheme}
             showsBuildings={true}
             showsIndoors={true}
         >
-            {region ? <Marker
+            {props.startingPoint ? <Marker
                 key="location"
-                coordinate={{ latitude: region.latitude, longitude: region.longitude }}
+                coordinate={{ latitude: props.startingPoint.latitude, longitude: props.startingPoint.longitude }}
                 tappable={false}
             >
-                <Image source={myLocationPin} style={styles.mapPin} />
+                {props.destination ? <Image source={directionsMarker1} style={styles.mapPin} /> : <Image source={myLocationPin} style={styles.mapPin} />}
             </Marker> : <></>}
-            {destination ? <Marker
+            {props.destination ? <Marker
                 key="destination"
-                coordinate={{ latitude: destination.latitude, longitude: destination.longitude }}
-            /> : <></>}
-            {region && destination ?
+                coordinate={{ latitude: props.destination.latitude, longitude: props.destination.longitude }}
+            >
+                <Image source={directionsMarker2} style={styles.mapPin} />
+            </Marker> : <></>}
+            {props.startingPoint && props.destination ?
                 <MapViewDirections
-                    origin={{ latitude: region.latitude, longitude: region.longitude }}
-                    destination={{ latitude: destination.latitude, longitude: destination.longitude }}
+                    origin={{ latitude: props.startingPoint.latitude, longitude: props.startingPoint.longitude }}
+                    destination={{ latitude: props.destination.latitude, longitude: props.destination.longitude }}
                     apikey={mapKey['map-key']} // insert your API Key here
                     strokeWidth={4}
-                    strokeColor="#111111"
+                    strokeColor={theme['accent']}
                 /> : <></>
             }
         </MapView>
