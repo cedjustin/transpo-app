@@ -22,6 +22,10 @@ const LocationSet = (props) => {
                   coords: {
                     latitude: place.result.geometry.location.lat,
                     longitude: place.result.geometry.location.lng
+                  },
+                  boundingBox: {
+                    northeast: place.result.geometry.viewport.northeast,
+                    southwest: place.result.geometry.viewport.southwest
                   }
                 },
                 position: 'starting-point',
@@ -47,6 +51,10 @@ const LocationSet = (props) => {
                   coords: {
                     latitude: place.result.geometry.location.lat,
                     longitude: place.result.geometry.location.lng
+                  },
+                  boundingBox: {
+                    northeast: place.result.geometry.viewport.northeast,
+                    southwest: place.result.geometry.viewport.southwest
                   }
                 },
                 position: 'destination',

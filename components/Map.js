@@ -36,6 +36,7 @@ const Map = (props) => {
         <MapView
             style={styles.map}
             initialRegion={{ ...props.startingPoint, ...props.deltaValues }}
+            region={{ ...props.startingPoint, ...props.deltaValues }}
             customMapStyle={mapTheme}
             showsBuildings={true}
             showsIndoors={true}

@@ -10,68 +10,66 @@ import mapKey from '../keys/map-key.json'
 
 
 const Index = ({ navigation }) => {
+
+  // default delta values
+  const latitudeDelta = 0.005
+  const longitudeDelta = 0.0021
+
   const [nameOfUserLocation, setNameOfUserLocation] = useState(null)
   const [startingPoint, setStartingPoint] = useState({
-    latitude: 1.9403,
-    longitude: 29.8739
+    latitude: 1.9403, // rwanda lat
+    longitude: 29.8739 // rwanda lng
   })
   const [destination, setDestination] = useState(null)
-  const [deltaValues, setDeltaValues] = useState(null)
+  const [deltaValues, setDeltaValues] = useState({
+    latitudeDelta,
+    longitudeDelta
+  })
+
+  const [distance, setDistance] = useState(null)
 
   const getRegion = async ({ location, position, getLocationName }) => {
 
-    const centroid = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude
-    }
+    try {
+      const lat = parseFloat(location.coords.latitude);
+      const lng = parseFloat(location.coords.longitude);
 
-    const boundingBox = {
-      southWest: {
-        latitude: centroid.latitude - 0.002569,
-        longitude: centroid.longitude + 0.003787
-      },
-      northEast: {
-        latitude: centroid.latitude + 0.002569,
-        longitude: centroid.longitude + 0.003778
-      }
-    }
-
-    const { width, height } = Dimensions.get('window');
-    const ASPECT_RATIO = width / height;
-
-    const lat = parseFloat(centroid.latitude);
-    const lng = parseFloat(centroid.longitude);
-    const northeastLat = parseFloat(boundingBox.northEast.latitude);
-    const southwestLat = parseFloat(boundingBox.southWest.latitude);
-    const latDelta = northeastLat - southwestLat;
-    const lngDelta = latDelta * ASPECT_RATIO;
-
-    if (getLocationName) {
-      try {
-        const res = await axios('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + location.coords.latitude + ',' + location.coords.longitude + '&key=' + mapKey['map-key'])
+      if (getLocationName) {
+        const res = await axios('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&key=' + mapKey['map-key'])
         setNameOfUserLocation(res.data.results[3].formatted_address)
-      } catch (e) {
-        console.log(e)
       }
+
+      // set coordinates
+
+      if (position == "starting-point") {
+        setStartingPoint({
+          latitude: lat,
+          longitude: lng,
+        })
+      } else {
+        setDestination({
+          latitude: lat,
+          longitude: lng,
+        })
+      }
+
+      // check distance between coordinates
+      if (startingPoint && (destination !== null || position == "destination")) {
+        const res = await axios('https://maps.googleapis.com/maps/api/distancematrix/json?origins=[' + startingPoint.latitude + ',' + startingPoint.longitude + ']&destinations=[' + destination.latitude + ',' + destination.longitude + ']&units=metric&key=' + mapKey['map-key'])
+        setDistance(res.data.rows[0].elements[0].distance.value)
+        setDeltaValues(prev => ({
+          latitudeDelta: prev.latitudeDelta * (distance / 1000),
+          longitudeDelta: prev.longitudeDelta * (distance / 1000)
+        }))
+      }
+
+      // setDeltaValues({
+      //   latitudeDelta: latDelta,
+      //   longitudeDelta: lngDelta,
+      // })
+    } catch (e) {
+      console.log(e)
     }
-
-    if (position == "starting-point") {
-      setStartingPoint({
-        latitude: lat,
-        longitude: lng,
-      })
-    } else {
-      setDestination({
-        latitude: lat,
-        longitude: lng,
-      })
-    }
-
-    setDeltaValues({
-      latitudeDelta: latDelta,
-      longitudeDelta: lngDelta,
-    })
-
   }
 
   return (

@@ -8,6 +8,7 @@ import { default as theme } from './theme/theme.json';
 import Login from './Views/Login';
 import Signup from './Views/Signup';
 import Index from './Views/Index'
+import Settings from './Views/Settings';
 
 const Navigation = () => {
 
@@ -44,6 +45,7 @@ const Navigation = () => {
                 </Stack.Navigator> :
                 <Drawer.Navigator>
                     <Drawer.Screen name='index' component={Index} options={{ headerShown: false }} />
+                    <Drawer.Screen name='settings' component={Settings} options={{ headerShown: false }} />
                 </Drawer.Navigator>
             }
         </NavigationContainer>
