@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, StyleSheet, View, Image, KeyboardAvoidingView } from 'react-native'
+import { Dimensions, StyleSheet, View, Image, KeyboardAvoidingView, Keyboard } from 'react-native'
 import mapKey from '../keys/map-key.json'
 import { default as theme } from '../theme/theme.json';
 import PlacesInput from 'react-native-places-input';
@@ -9,6 +9,28 @@ import startingPointPin from '../assets/starting-point-pin.png'
 import destinationPin from '../assets/destination-pin.png'
 
 const LocationSet = (props) => {
+
+  const setPlace = (place, position) => {
+    
+    // Hide keyboard
+    Keyboard.dismiss()
+
+    props.getRegion({
+      location: {
+        coords: {
+          latitude: place.result.geometry.location.lat,
+          longitude: place.result.geometry.location.lng
+        },
+        boundingBox: {
+          northeast: place.result.geometry.viewport.northeast,
+          southwest: place.result.geometry.viewport.southwest
+        }
+      },
+      position: position,
+      getLocationName: false
+    })
+  }
+
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView>
@@ -16,22 +38,7 @@ const LocationSet = (props) => {
           <Image source={startingPointPin} style={styles.icon} />
           <PlacesInput
             googleApiKey={mapKey['map-key']}
-            onSelect={place => {
-              props.getRegion({
-                location: {
-                  coords: {
-                    latitude: place.result.geometry.location.lat,
-                    longitude: place.result.geometry.location.lng
-                  },
-                  boundingBox: {
-                    northeast: place.result.geometry.viewport.northeast,
-                    southwest: place.result.geometry.viewport.southwest
-                  }
-                },
-                position: 'starting-point',
-                getLocationName: false
-              })
-            }}
+            onSelect={place => setPlace(place, 'starting-point')}
             stylesContainer={{ ...styles.placesSearchContainer, zIndex: 1 }}
             stylesInput={styles.placesSearchInput}
             placeHolder={props.nameOfUserLocation ? props.nameOfUserLocation : 'Search for starting point'}
@@ -45,22 +52,7 @@ const LocationSet = (props) => {
           <Image source={destinationPin} style={styles.icon} />
           <PlacesInput
             googleApiKey={mapKey['map-key']}
-            onSelect={place => {
-              props.getRegion({
-                location: {
-                  coords: {
-                    latitude: place.result.geometry.location.lat,
-                    longitude: place.result.geometry.location.lng
-                  },
-                  boundingBox: {
-                    northeast: place.result.geometry.viewport.northeast,
-                    southwest: place.result.geometry.viewport.southwest
-                  }
-                },
-                position: 'destination',
-                getLocationName: false
-              })
-            }}
+            onSelect={place => setPlace(place,'destination')}
             stylesContainer={{ ...styles.placesSearchContainer, zIndex: 0 }}
             stylesInput={styles.placesSearchInput}
             placeHolder='Search destination'

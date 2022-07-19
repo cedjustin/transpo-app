@@ -15,7 +15,6 @@ import directionsMarker2 from '../assets/directions-marker-2.png'
 const Map = (props) => {
 
     const [errorMsg, setErrorMsg] = useState(null);
-
     useEffect(() => {
         (async () => {
             try {
@@ -35,8 +34,8 @@ const Map = (props) => {
     return (
         <MapView
             style={styles.map}
-            initialRegion={{ ...props.startingPoint, ...props.deltaValues }}
-            region={{ ...props.startingPoint, ...props.deltaValues }}
+            initialRegion={{ ...props.currentRegion, ...props.deltaValues }}
+            region={{ ...props.currentRegion, ...props.deltaValues }}
             customMapStyle={mapTheme}
             showsBuildings={true}
             showsIndoors={true}
@@ -45,12 +44,14 @@ const Map = (props) => {
                 key="location"
                 coordinate={{ latitude: props.startingPoint.latitude, longitude: props.startingPoint.longitude }}
                 tappable={false}
+                identifier='startMarker'
             >
                 {props.destination ? <Image source={directionsMarker1} style={styles.mapPin} /> : <Image source={myLocationPin} style={styles.mapPin} />}
             </Marker> : <></>}
             {props.destination ? <Marker
                 key="destination"
                 coordinate={{ latitude: props.destination.latitude, longitude: props.destination.longitude }}
+                identifier='destinationMarker'
             >
                 <Image source={directionsMarker2} style={styles.mapPin} />
             </Marker> : <></>}

@@ -16,17 +16,17 @@ const Index = ({ navigation }) => {
   const longitudeDelta = 0.0021
 
   const [nameOfUserLocation, setNameOfUserLocation] = useState(null)
-  const [startingPoint, setStartingPoint] = useState({
-    latitude: 1.9403, // rwanda lat
-    longitude: 29.8739 // rwanda lng
-  })
+  const [startingPoint, setStartingPoint] = useState(null)
   const [destination, setDestination] = useState(null)
   const [deltaValues, setDeltaValues] = useState({
     latitudeDelta,
     longitudeDelta
   })
-
   const [distance, setDistance] = useState(null)
+  const [currentRegion, setCurrentRegion] = useState({
+    latitude: 1.9403, // rwanda lat
+    longitude: 29.8739 // rwanda lng
+  })
 
   const getRegion = async ({ location, position, getLocationName }) => {
 
@@ -40,6 +40,10 @@ const Index = ({ navigation }) => {
       }
 
       // set coordinates
+      setCurrentRegion({
+        latitude: lat,
+        longitude: lng,
+      })
 
       if (position == "starting-point") {
         setStartingPoint({
@@ -54,19 +58,13 @@ const Index = ({ navigation }) => {
       }
 
       // check distance between coordinates
-      if (startingPoint && (destination !== null || position == "destination")) {
+      if (startingPoint !== null && destination !== null) {
+
         const res = await axios('https://maps.googleapis.com/maps/api/distancematrix/json?origins=[' + startingPoint.latitude + ',' + startingPoint.longitude + ']&destinations=[' + destination.latitude + ',' + destination.longitude + ']&units=metric&key=' + mapKey['map-key'])
         setDistance(res.data.rows[0].elements[0].distance.value)
-        setDeltaValues(prev => ({
-          latitudeDelta: prev.latitudeDelta * (distance / 1000),
-          longitudeDelta: prev.longitudeDelta * (distance / 1000)
-        }))
+
       }
 
-      // setDeltaValues({
-      //   latitudeDelta: latDelta,
-      //   longitudeDelta: lngDelta,
-      // })
     } catch (e) {
       console.log(e)
     }
@@ -93,6 +91,7 @@ const Index = ({ navigation }) => {
         setDestination={setDestination}
         getRegion={getRegion}
         deltaValues={deltaValues}
+        currentRegion={currentRegion}
       />
     </ScreenWrapper>
   )
