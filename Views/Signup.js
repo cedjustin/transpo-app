@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ScreenWrapper from '../components/ScreenWrapper'
 import { StyleSheet, View, Image, Dimensions } from 'react-native';
 import Back from '../components/navigation/Back';
@@ -11,8 +11,20 @@ import { Button, Input, Text } from '@ui-kitten/components';
 const Signup = ({ navigation }) => {
 
     const [phoneNumber, setPhoneNumber] = useState('+250');
+    const [phoneNumberError, setPhoneNumberError] = useState(false)
     const [pinNumber, setPinNumber] = useState('');
+    const [pinNumberError, setPinNumberError] = useState(false)
     const [confirmPinNumber, setConfirmPinNumber] = useState('');
+    const [confirmPinNumberError, setConfirmPinNumberError] = useState(false)
+
+    const pinNumberRef = useRef(null)
+    const confirmPinNumberRef = useRef(null)
+
+    const signup = async () => {
+        phoneNumber == '+250' || '' || phoneNumber.length < 13 ? setPhoneNumberError(true) : setPhoneNumberError(false)
+        pinNumberError == '' || pinNumber.length != 4 ? setPinNumberError(true) : setPinNumberError(false)
+        confirmPinNumberError == '' || confirmPinNumber.length != 4 ? setConfirmPinNumberError(true) : setConfirmPinNumberError(false)
+    }
 
     const goToLogin = () => {
         navigation.navigate('login')
@@ -32,32 +44,53 @@ const Signup = ({ navigation }) => {
                     <Input
                         placeholder='Enter phone number'
                         value={phoneNumber}
-                        onChangeText={nextValue => setPhoneNumber(nextValue)}
+                        onChangeText={nextValue => {
+                            phoneNumberError ? setPhoneNumberError(false) : void (0)
+                            setPhoneNumber(nextValue)
+                        }}
                         style={styles.input}
                         size='large'
                         keyboardType='number-pad'
+                        textStyle={{ color: phoneNumberError ? theme['danger'] : '#fff' }}
+                        onSubmitEditing={() => pinNumberRef.current.focus()}
                     />
-                    <Text category='h5'>Pin number</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text category='h5'>Pin number</Text><Text>4 numbers</Text>
+                    </View>
                     <Input
                         placeholder='Enter pin number'
                         value={pinNumber}
-                        onChangeText={nextValue => setPinNumber(nextValue)}
+                        onChangeText={nextValue => {
+                            pinNumberError ? setPinNumberError(false) : void (0)
+                            pinNumber.length <= 4 ? setPinNumber(nextValue) : void (0)
+                        }}
                         style={styles.input}
                         size='large'
                         keyboardType='number-pad'
+                        textStyle={{ color: pinNumberError ? theme['danger'] : '#fff' }}
+                        ref={pinNumberRef}
+                        onSubmitEditing={() => confirmPinNumberRef.current.focus()}
                     />
                     <Text category='h5'>Confirm Pin number</Text>
                     <Input
                         placeholder='Enter pin number'
                         value={confirmPinNumber}
-                        onChangeText={nextValue => setConfirmPinNumber(nextValue)}
+                        onChangeText={nextValue => {
+                            confirmPinNumberError ? setConfirmPinNumberError(false) : void (0)
+                            confirmPinNumber.length <= 4 ? setConfirmPinNumber(nextValue) : void (0)
+                        }}
                         style={styles.input}
                         size='large'
                         keyboardType='number-pad'
+                        textStyle={{ color: confirmPinNumberError ? theme['danger'] : '#fff' }}
+                        ref={confirmPinNumberRef}
                     />
                 </View>
                 <View style={{ marginVertical: 20 }}>
-                    <Button style={{ backgroundColor: theme.primary, borderColor: theme.primary }}>
+                    <Button
+                        style={{ backgroundColor: theme.primary, borderColor: theme.primary }}
+                        onPress={() => { signup() }}
+                    >
                         {() => <Text style={{ color: '#000' }}>
                             SIGNUP
                         </Text>}

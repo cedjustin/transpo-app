@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, StyleSheet, View, Image, KeyboardAvoidingView, Keyboard } from 'react-native'
+import { Dimensions, StyleSheet, Image, KeyboardAvoidingView, Keyboard } from 'react-native'
 import mapKey from '../keys/map-key.json'
 import { default as theme } from '../theme/theme.json';
 import PlacesInput from 'react-native-places-input';
@@ -7,11 +7,13 @@ import PlacesInput from 'react-native-places-input';
 //images
 import startingPointPin from '../assets/starting-point-pin.png'
 import destinationPin from '../assets/destination-pin.png'
+import { MotiView } from 'moti';
+import { Button, Text } from '@ui-kitten/components';
 
 const LocationSet = (props) => {
 
   const setPlace = (place, position) => {
-    
+
     // Hide keyboard
     Keyboard.dismiss()
 
@@ -32,9 +34,31 @@ const LocationSet = (props) => {
   }
 
   return (
-    <View style={styles.container}>
+    <MotiView
+      from={{ height: (Dimensions.get('window').height * 20) / 100, marginHorizontal: 10 }}
+      animate={{
+        height: props.startingPoint && props.destination ? (Dimensions.get('window').height * 5) / 100 : (Dimensions.get('window').height * 20) / 100,
+      }}
+      transition={{ type: 'timing', delay: 1000 }}
+    >
+      {props.startingPoint && props.destination ? <>
+        <MotiView
+          from={{ opacity: 0 }}
+          animate={{
+            opacity: props.startingPoint && props.destination ? 1 : 0,
+          }}
+          transition={{ type: 'timing', delay: 1100 }}
+        >
+          <Button onPress={()=>{props.setDestination(null)}} appearance='ghost'>Change Location</Button>
+        </MotiView>
+      </> : <></>}
       <KeyboardAvoidingView>
-        <View style={styles.row}>
+        <MotiView
+          style={styles.row}
+          from={{ opacity: 1 }}
+          animate={{ opacity: props.startingPoint && props.destination ? 0 : 1 }}
+          transition={{ type: 'timing', delay: 700 }}
+        >
           <Image source={startingPointPin} style={styles.icon} />
           <PlacesInput
             googleApiKey={mapKey['map-key']}
@@ -47,12 +71,17 @@ const LocationSet = (props) => {
             textInputProps={{ placeholderTextColor: theme['muted-white'] }}
             queryCountries={['RW']}
           />
-        </View>
-        <View style={styles.row}>
+        </MotiView>
+        <MotiView
+          style={styles.row}
+          from={{ opacity: 1 }}
+          animate={{ opacity: props.startingPoint && props.destination ? 0 : 1 }}
+          transition={{ type: 'timing', delay: 350 }}
+        >
           <Image source={destinationPin} style={styles.icon} />
           <PlacesInput
             googleApiKey={mapKey['map-key']}
-            onSelect={place => setPlace(place,'destination')}
+            onSelect={place => setPlace(place, 'destination')}
             stylesContainer={{ ...styles.placesSearchContainer, zIndex: 0 }}
             stylesInput={styles.placesSearchInput}
             placeHolder='Search destination'
@@ -61,17 +90,13 @@ const LocationSet = (props) => {
             textInputProps={{ placeholderTextColor: theme['accent'] }}
             queryCountries={['RW']}
           />
-        </View>
+        </MotiView>
       </KeyboardAvoidingView>
-    </View>
+    </MotiView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 10,
-    height: (Dimensions.get('window').height * 20) / 100,
-  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

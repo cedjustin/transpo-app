@@ -12,7 +12,7 @@ import Settings from './Views/Settings';
 
 const Navigation = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(true)
 
     const Stack = createNativeStackNavigator()
     const Drawer = createDrawerNavigator()

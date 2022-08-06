@@ -4,6 +4,7 @@ import { ApplicationProvider } from '@ui-kitten/components';
 import { default as theme } from './theme/theme.json';
 import { StatusBar } from 'react-native';
 import Navigation from './Navigation';
+import 'react-native-reanimated'
 
 export default function App() {
   return (

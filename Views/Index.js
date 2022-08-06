@@ -7,6 +7,8 @@ import { Dimensions, StyleSheet, View } from 'react-native'
 import { default as theme } from '../theme/theme.json';
 import axios from 'axios';
 import mapKey from '../keys/map-key.json'
+import TransportationSet from '../components/TransportationSet'
+import { MotiView } from 'moti'
 
 
 const Index = ({ navigation }) => {
@@ -14,6 +16,8 @@ const Index = ({ navigation }) => {
   // default delta values
   const latitudeDelta = 0.005
   const longitudeDelta = 0.0021
+
+  const headerBottomRadius = 30
 
   const [nameOfUserLocation, setNameOfUserLocation] = useState(null)
   const [startingPoint, setStartingPoint] = useState(null)
@@ -72,7 +76,15 @@ const Index = ({ navigation }) => {
 
   return (
     <ScreenWrapper>
-      <View style={styles.header}>
+      <MotiView
+        style={styles.header}
+        from={{
+          borderBottomLeftRadius: headerBottomRadius,
+          borderBottomRightRadius: headerBottomRadius,
+        }}
+        animate={{ borderBottomLeftRadius: startingPoint && destination ? 0 : headerBottomRadius, borderBottomRightRadius: startingPoint && destination ? 0 : headerBottomRadius }}
+        transition={{ type: 'timing', delay: 1100 }}
+      >
         <DrawerButton navigation={navigation} />
         <LocationSet
           nameOfUserLocation={nameOfUserLocation}
@@ -82,7 +94,7 @@ const Index = ({ navigation }) => {
           setDestination={setDestination}
           getRegion={getRegion}
         />
-      </View>
+      </MotiView>
       <Map
         setNameOfUserLocation={setNameOfUserLocation}
         startingPoint={startingPoint}
@@ -93,15 +105,17 @@ const Index = ({ navigation }) => {
         deltaValues={deltaValues}
         currentRegion={currentRegion}
       />
+      <TransportationSet
+        startingPoint={startingPoint}
+        destination={destination}
+      />
     </ScreenWrapper>
   )
 }
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: theme['background'],
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    backgroundColor: theme['background']
   }
 })
 
