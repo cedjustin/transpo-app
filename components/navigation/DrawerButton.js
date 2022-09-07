@@ -12,7 +12,7 @@ const DrawerButton = (props) => {
     }
 
     return (
-        <View style={{ height: (Dimensions.get('window').height * 10) / 100 }}>
+        <View style={{ height: (Dimensions.get('window').height * 5) / 100 }}>
             <Button
                 appearance='ghost'
                 style={styles.button}

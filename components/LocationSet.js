@@ -41,17 +41,6 @@ const LocationSet = (props) => {
       }}
       transition={{ type: 'timing', delay: 1000 }}
     >
-      {props.startingPoint && props.destination ? <>
-        <MotiView
-          from={{ opacity: 0 }}
-          animate={{
-            opacity: props.startingPoint && props.destination ? 1 : 0,
-          }}
-          transition={{ type: 'timing', delay: 1100 }}
-        >
-          <Button onPress={()=>{props.setDestination(null)}} appearance='ghost'>Change Location</Button>
-        </MotiView>
-      </> : <></>}
       <KeyboardAvoidingView>
         <MotiView
           style={styles.row}

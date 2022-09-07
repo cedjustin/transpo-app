@@ -71,7 +71,7 @@ const Map = (props) => {
 const styles = StyleSheet.create({
     map: {
         width: Dimensions.get('window').width,
-        height: ((Dimensions.get('window').height * 70) / 100) + 20,
+        height: ((Dimensions.get('window').height * 70) / 100) + 60,
         zIndex: -1,
         top: -20
     },
