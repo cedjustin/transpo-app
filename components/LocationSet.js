@@ -8,7 +8,6 @@ import PlacesInput from 'react-native-places-input';
 import startingPointPin from '../assets/starting-point-pin.png'
 import destinationPin from '../assets/destination-pin.png'
 import { MotiView } from 'moti';
-import { Button, Text } from '@ui-kitten/components';
 
 const LocationSet = (props) => {
 
@@ -37,16 +36,17 @@ const LocationSet = (props) => {
     <MotiView
       from={{ height: (Dimensions.get('window').height * 20) / 100, marginHorizontal: 10 }}
       animate={{
-        height: props.startingPoint && props.destination ? (Dimensions.get('window').height * 5) / 100 : (Dimensions.get('window').height * 20) / 100,
+        height: props.startingPoint && props.destination ? 10 : (Dimensions.get('window').height * 20) / 100,
       }}
       transition={{ type: 'timing', delay: 1000 }}
+      onDidAnimate={() => { props.setLocationSetOpen(prev => !prev) }}
     >
       <KeyboardAvoidingView>
         <MotiView
           style={styles.row}
           from={{ opacity: 1 }}
           animate={{ opacity: props.startingPoint && props.destination ? 0 : 1 }}
-          transition={{ type: 'timing', delay: 700 }}
+          transition={{ type: 'timing', delay: props.locationSetOpen ? 700 : 1350 }}
         >
           <Image source={startingPointPin} style={styles.icon} />
           <PlacesInput
@@ -65,7 +65,7 @@ const LocationSet = (props) => {
           style={styles.row}
           from={{ opacity: 1 }}
           animate={{ opacity: props.startingPoint && props.destination ? 0 : 1 }}
-          transition={{ type: 'timing', delay: 350 }}
+          transition={{ type: 'timing', delay: props.locationSetOpen? 350 : 1700 }}
         >
           <Image source={destinationPin} style={styles.icon} />
           <PlacesInput
@@ -76,7 +76,7 @@ const LocationSet = (props) => {
             placeHolder='Search destination'
             stylesList={styles.placesResultsList}
             stylesItemText={{ color: theme['muted-white'] }}
-            textInputProps={{ placeholderTextColor: theme['accent'] }}
+            textInputProps={{ placeholderTextColor: theme['accent'], value: props.destination }}
             queryCountries={['RW']}
           />
         </MotiView>

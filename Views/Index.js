@@ -32,6 +32,9 @@ const Index = ({ navigation }) => {
     longitude: 29.8739 // rwanda lng
   })
 
+  // handle animations
+  const [locationSetOpen, setLocationSetOpen] = useState(false)
+
   const getRegion = async ({ location, position, getLocationName }) => {
 
     try {
@@ -93,6 +96,8 @@ const Index = ({ navigation }) => {
           destination={destination}
           setDestination={setDestination}
           getRegion={getRegion}
+          locationSetOpen={locationSetOpen}
+          setLocationSetOpen={setLocationSetOpen}
         />
       </MotiView>
       <Map
@@ -108,6 +113,8 @@ const Index = ({ navigation }) => {
       <TransportationSet
         startingPoint={startingPoint}
         destination={destination}
+        setStartingPoint={setStartingPoint}
+        setDestination={setDestination}
       />
     </ScreenWrapper>
   )
