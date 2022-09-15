@@ -1,9 +1,9 @@
 [
-  { "name": "motorbike", "cost": 400, "icon":"https://img.icons8.com/color-glass/96/000000/motorcycle.png"  },
-  { "name": "scooter", "cost": 200, "icon":"https://img.icons8.com/color-glass/96/000000/scooter.png" },
+  { "name": "motorbike", "cost": 150, "icon":"https://img.icons8.com/color-glass/96/000000/motorcycle.png"  },
+  { "name": "scooter", "cost": 100, "icon":"https://img.icons8.com/color-glass/96/000000/scooter.png" },
   { "name": "pickup", "cost": 1000, "icon":"https://img.icons8.com/color-glass/96/000000/tow-truck.png"  },
   { "name": "sedan", "cost": 700, "icon":"https://img.icons8.com/color-glass/96/000000/sedan.png"  },
   { "name": "suv", "cost": 700, "icon":"https://img.icons8.com/color-glass/96/000000/suv.png"  },
   { "name": "truck", "cost": 1500, "icon":"https://img.icons8.com/color-glass/96/000000/rv-campground.png"  },
-  { "name": "van", "cost": 1500, "icon":"https://img.icons8.com/color-glass/96/000000/tow-truck.png"  }
+  { "name": "van", "cost": 1500, "icon":"https://img.icons8.com/color-glass/96/000000/courier-truck-discharge.png"  }
 ]
