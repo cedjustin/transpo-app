@@ -20,8 +20,22 @@ const Index = ({ navigation }) => {
   const headerBottomRadius = 30
 
   const [nameOfUserLocation, setNameOfUserLocation] = useState(null)
-  const [startingPoint, setStartingPoint] = useState(null)
-  const [destination, setDestination] = useState(null)
+
+  const [startingPoint, setStartingPoint] = useState(
+    //   {
+    //   latitude: -1.9632409,
+    //   longitude: 30.1576673,
+    // }
+    null
+  )
+  const [destination, setDestination] = useState(
+    //   {
+    //   latitude: -1.9350297,
+    //   longitude: 30.0853744
+    // }
+    null
+  )
+
   const [deltaValues, setDeltaValues] = useState({
     latitudeDelta,
     longitudeDelta
@@ -65,9 +79,17 @@ const Index = ({ navigation }) => {
       }
 
       // check distance between coordinates
-      if (startingPoint !== null && destination !== null) {
+      if (startingPoint !== null && position == 'destination') {
 
-        const res = await axios('https://maps.googleapis.com/maps/api/distancematrix/json?origins=[' + startingPoint.latitude + ',' + startingPoint.longitude + ']&destinations=[' + destination.latitude + ',' + destination.longitude + ']&units=metric&key=' + mapKey['map-key'])
+        const places = {
+          startingPoint,
+          destination: {
+            latitude: lat,
+            longitude: lng
+          }
+        }
+
+        const res = await axios('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + places.startingPoint.latitude + ',' + places.startingPoint.longitude + '&destinations=' + places.destination.latitude + ',' + places.destination.longitude + '&units=metric&key=' + mapKey['map-key'])
         setDistance(res.data.rows[0].elements[0].distance.value)
 
       }
@@ -109,12 +131,15 @@ const Index = ({ navigation }) => {
         getRegion={getRegion}
         deltaValues={deltaValues}
         currentRegion={currentRegion}
+        locationSetOpen={locationSetOpen}
       />
       <TransportationSet
         startingPoint={startingPoint}
         destination={destination}
         setStartingPoint={setStartingPoint}
         setDestination={setDestination}
+        distance={distance}
+        locationSetOpen={locationSetOpen}
       />
     </ScreenWrapper>
   )

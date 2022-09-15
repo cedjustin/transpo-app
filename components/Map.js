@@ -11,6 +11,7 @@ import theme from '../theme/theme.json'
 import myLocationPin from '../assets/my-location-pin.png'
 import directionsMarker1 from '../assets/directions-marker-1.png'
 import directionsMarker2 from '../assets/directions-marker-2.png'
+import { MotiView } from 'moti';
 
 const Map = (props) => {
 
@@ -32,39 +33,48 @@ const Map = (props) => {
     }, []);
 
     return (
-        <MapView
-            style={styles.map}
-            initialRegion={{ ...props.currentRegion, ...props.deltaValues }}
-            region={{ ...props.currentRegion, ...props.deltaValues }}
-            customMapStyle={mapTheme}
-            showsBuildings={true}
-            showsIndoors={true}
+        <MotiView
+            from={{
+                width: Dimensions.get('window').width,
+                height: ((Dimensions.get('window').height * 70) / 100) + 60,
+                zIndex: -1,
+                top: -20
+            }}
         >
-            {props.startingPoint ? <Marker
-                key="location"
-                coordinate={{ latitude: props.startingPoint.latitude, longitude: props.startingPoint.longitude }}
-                tappable={false}
-                identifier='startMarker'
+            <MapView
+                style={{ width: '100%', height: '100%' }}
+                initialRegion={{ ...props.currentRegion, ...props.deltaValues }}
+                region={{ ...props.currentRegion, ...props.deltaValues }}
+                customMapStyle={mapTheme}
+                showsBuildings={true}
+                showsIndoors={true}
             >
-                {props.destination ? <Image source={directionsMarker1} style={styles.mapPin} /> : <Image source={myLocationPin} style={styles.mapPin} />}
-            </Marker> : <></>}
-            {props.destination ? <Marker
-                key="destination"
-                coordinate={{ latitude: props.destination.latitude, longitude: props.destination.longitude }}
-                identifier='destinationMarker'
-            >
-                <Image source={directionsMarker2} style={styles.mapPin} />
-            </Marker> : <></>}
-            {props.startingPoint && props.destination ?
-                <MapViewDirections
-                    origin={{ latitude: props.startingPoint.latitude, longitude: props.startingPoint.longitude }}
-                    destination={{ latitude: props.destination.latitude, longitude: props.destination.longitude }}
-                    apikey={mapKey['map-key']} // insert your API Key here
-                    strokeWidth={4}
-                    strokeColor={theme['accent']}
-                /> : <></>
-            }
-        </MapView>
+                {props.startingPoint ? <Marker
+                    key="location"
+                    coordinate={{ latitude: props.startingPoint.latitude, longitude: props.startingPoint.longitude }}
+                    tappable={false}
+                    identifier='startMarker'
+                >
+                    {props.destination ? <Image source={directionsMarker1} style={styles.mapPin} /> : <Image source={myLocationPin} style={styles.mapPin} />}
+                </Marker> : <></>}
+                {props.destination ? <Marker
+                    key="destination"
+                    coordinate={{ latitude: props.destination.latitude, longitude: props.destination.longitude }}
+                    identifier='destinationMarker'
+                >
+                    <Image source={directionsMarker2} style={styles.mapPin} />
+                </Marker> : <></>}
+                {props.startingPoint && props.destination ?
+                    <MapViewDirections
+                        origin={{ latitude: props.startingPoint.latitude, longitude: props.startingPoint.longitude }}
+                        destination={{ latitude: props.destination.latitude, longitude: props.destination.longitude }}
+                        apikey={mapKey['map-key']} // insert your API Key here
+                        strokeWidth={4}
+                        strokeColor={theme['accent']}
+                    /> : <></>
+                }
+            </MapView>
+        </MotiView>
     )
 }
 

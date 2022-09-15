@@ -35,18 +35,11 @@ const LocationSet = (props) => {
   return (
     <MotiView
       from={{ height: (Dimensions.get('window').height * 20) / 100, marginHorizontal: 10 }}
-      animate={{
-        height: props.startingPoint && props.destination ? 10 : (Dimensions.get('window').height * 20) / 100,
-      }}
-      transition={{ type: 'timing', delay: 1000 }}
-      onDidAnimate={() => { props.setLocationSetOpen(prev => !prev) }}
     >
       <KeyboardAvoidingView>
         <MotiView
           style={styles.row}
           from={{ opacity: 1 }}
-          animate={{ opacity: props.startingPoint && props.destination ? 0 : 1 }}
-          transition={{ type: 'timing', delay: props.locationSetOpen ? 700 : 1350 }}
         >
           <Image source={startingPointPin} style={styles.icon} />
           <PlacesInput
@@ -64,8 +57,6 @@ const LocationSet = (props) => {
         <MotiView
           style={styles.row}
           from={{ opacity: 1 }}
-          animate={{ opacity: props.startingPoint && props.destination ? 0 : 1 }}
-          transition={{ type: 'timing', delay: props.locationSetOpen? 350 : 1700 }}
         >
           <Image source={destinationPin} style={styles.icon} />
           <PlacesInput
@@ -76,7 +67,7 @@ const LocationSet = (props) => {
             placeHolder='Search destination'
             stylesList={styles.placesResultsList}
             stylesItemText={{ color: theme['muted-white'] }}
-            textInputProps={{ placeholderTextColor: theme['accent'], value: props.destination }}
+            textInputProps={{ placeholderTextColor: theme['accent'] }}
             queryCountries={['RW']}
           />
         </MotiView>
